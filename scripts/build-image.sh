@@ -11,8 +11,12 @@
 #       ./scripts/build-image.sh
 #
 
+# Basically try to build the image
+
+# This make sure that $CONTAINER_REGISTRY" and "$VERSION" environtment variables are exist
 set -u # or set -o nounset
 : "$CONTAINER_REGISTRY"
 : "$VERSION"
 
-docker build -t $CONTAINER_REGISTRY/video-streaming:$VERSION --file ./Dockerfile-prod .
+# You can directly run this script, like this : ./build-image.sh
+docker build -t $CONTAINER_REGISTRY/video-streaming-local:$VERSION --file ./Dockerfile-prod .

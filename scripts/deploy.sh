@@ -13,8 +13,10 @@
 #   ./scripts/deploy.sh
 #
 
+
 set -u # or set -o nounset
 : "$CONTAINER_REGISTRY"
 : "$VERSION"
 
+# - is a placeholder for a file
 envsubst < ./scripts/kubernetes/deploy.yaml | kubectl apply -f -

@@ -12,12 +12,17 @@
 #
 #       ./scripts/push-image.sh
 #
+# Basically try to upload the create image into container registry
 
+# This make sure that all of defined environtment variables are exist
 set -u # or set -o nounset
 : "$CONTAINER_REGISTRY"
 : "$VERSION"
 : "$REGISTRY_UN"
 : "$REGISTRY_PW"
 
-echo $REGISTRY_PW | docker login $CONTAINER_REGISTRY --username $REGISTRY_UN --password-stdin
-docker push $CONTAINER_REGISTRY/video-streaming:$VERSION
+# First login to container registry
+docker login $CONTAINER_REGISTRY --username $REGISTRY_UN --password $REGISTRY_PW
+
+# Then upload it
+docker push $CONTAINER_REGISTRY/video-streaming-local:$VERSION

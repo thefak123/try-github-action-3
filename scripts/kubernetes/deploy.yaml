@@ -23,6 +23,7 @@ spec:
     spec:
       containers: 
       - name: video-streaming
+        # $CONTAINER_REGISTRY and $VERSION is an environtment variables, you fill it using tools called envsubst
         image: $CONTAINER_REGISTRY/video-streaming:$VERSION
         imagePullPolicy: IfNotPresent
         env:

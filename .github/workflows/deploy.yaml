@@ -5,12 +5,12 @@
 # For real use you might want to restrict this to the "prod" branch.
 #
 
+
 name: Deploy microservice
 
 on:
-  #
-  # Deploys the microservice on push to the main branch of this code repository.
-  #
+ # When the script is triggered ? 
+ # The script will be triggered when you push something into main branch
   push: 
     branches:
       - main
@@ -23,9 +23,12 @@ on:
 jobs:
 
   deploy:
+    # Select the vm operating system
     runs-on: ubuntu-latest
     
     env:
+     # github.sha is the hash of the commit that triggered in the workflow
+     # this comes from contextual variable, where it contains information about workflow, the run, environtment, etc
       VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
@@ -33,11 +36,14 @@ jobs:
 
     steps:
       
-      # Checks-out your repository under $GITHUB_WORKSPACE.
+
+       # The actions/checkout action is a GitHub Action that checks out your repository under $GITHUB_WORKSPACE, so 
+      # your workflow can access the contents of the repository.
       - uses: actions/checkout@v3
 
+      # All of these steps below will be run sequentially
       #
-      # Builds the Docker image.
+      # Builds the Docker image. 
       #
       - name: Build
         run: ./scripts/build-image.sh
@@ -53,13 +59,16 @@ jobs:
       #
       # https://github.com/marketplace/actions/kubernetes-cli-kubectl
       #
+      # Install kubernetes and connect  into cluster
+      # This is actually custom made by community
       - uses: tale/kubectl-action@v1
         with:
+          # import kubectl configuration from github secret
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
           kubectl-version: v1.24.2
       
       #
-      # Expands the configuration template and deploys the microservice.
+      # Deploy the contianers into kubernetes cluster
       #
       - name: Deploy
         run: ./scripts/deploy.sh
