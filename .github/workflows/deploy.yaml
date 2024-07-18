@@ -30,6 +30,8 @@ jobs:
      # github.sha is the hash of the commit that triggered in the workflow
      # this comes from contextual variable, where it contains information about workflow, the run, environtment, etc
       VERSION: ${{ github.sha }}
+      # To access github secret, first you need to point into secrets object 
+      # Explanation of github secret is in the notes.ipynb
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
       REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
@@ -61,9 +63,12 @@ jobs:
       #
       # Install kubernetes and connect  into cluster
       # This is actually custom made by community
+      
       - uses: tale/kubectl-action@v1
         with:
           # import kubectl configuration from github secret
+          # To access github secret, first you need to point into secrets object 
+        # Explanation of github secret is in the notes.ipynb
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
           kubectl-version: v1.24.2
       
